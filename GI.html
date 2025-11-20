@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Střídání textu Opraveno</title>
+    <style>
+        /* --- Základní styly a kontejnery --- */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Posun celé stránky nahoru */
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            margin-top: 100px; /* Posun dolů od horního okraje */
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            
+            position: relative; 
+            overflow: hidden;   
+            height: 100px;      
+            width: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column; 
+        }
+
+        .text-wrapper {
+            /* Vnitřní wrapper pro texty, který definuje prostor pro animaci */
+            position: relative;
+            height: 2em; /* Pevná výška na velikost fontu (2em) */
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .text-line {
+            font-size: 2em;
+            font-weight: bold;
+            position: absolute; 
+            width: 100%;
+            /* Plynulá transformace trvá 0.5s */
+            transition: transform 0.5s ease-in-out; 
+            
+            /* ZMĚNA: Skrytí prvků při začátku */
+            opacity: 0;
+        }
+        
+        .note {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px; 
+            /* ZMĚNA: Nastavení kurzoru na ruku pro poznámku, i když je klikací celý kontejner */
+            cursor: pointer; 
+        }
+
+        /* --- Počáteční stavy --- */
+        
+        /* ZMĚNA: Text 1 je viditelný a uprostřed. */
+        #text1 {
+            color: #d81b60;
+            opacity: 1; /* Viditelný */
+            transform: translateY(0);
+        }
+
+        /* ZMĚNA: Text 2 je na začátku skrytý nahoře */
+        #text2 {
+            color: #1b60d8;
+            opacity: 0; /* Skrytý */
+            transform: translateY(-100%); /* Skrytý nahoře */
+        }
+
+
+        /* --- Aktivní stav B (Po kliknutí) --- */
+
+        /* Původní Text 1 odjíždí dolů a zmizí */
+        .state-b #text1 {
+            opacity: 0;
+            transform: translateY(100%);
+        }
+
+        /* Nový Text 2 přijíždí ze shora a objeví se */
+        .state-b #text2 {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* --- Aktivní stav A (Po dalším kliknutí, návrat) --- */
+        
+        /* Původní Text 2 odjíždí dolů a zmizí */
+        .state-a #text2 {
+            opacity: 0;
+            transform: translateY(100%);
+        }
+
+        /* Nový Text 1 přijíždí ze shora a objeví se */
+        .state-a #text1 {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Nastavení pozice textů, které nejsou vidět, do horní části,
+           aby při dalším kliknutí přijely shora. */
+        .state-a #text2 {
+            transform: translateY(-100%);
+            /* Důležité: Tuto transformaci aplikujeme po dokončení animace (0.5s), aby se nepřerušila */
+            transition: transform 0s 0.5s, opacity 0.5s ease-in-out;
+        }
+        
+        .state-b #text1 {
+            transform: translateY(-100%);
+            transition: transform 0s 0.5s, opacity 0.5s ease-in-out;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container" id="animatedContainer" onclick="toggleText()">
+        
+        <div class="text-wrapper">
+            <p class="text-line" id="text1">Babičky vyhlížejí tvůj penis! jen 50 metru od tebe</p>
+            <p class="text-line" id="text2">Nevydržíš ani 2 minuty! udělej se snikym nahý</p>
+        </div>
+        
+        <p class="note" id="note"></p>
+    </div>
+
+    <script>
+        // Začínáme ve STAVU A (text1 je viditelný)
+        const container = document.getElementById('animatedContainer');
+        container.classList.add('state-a'); 
+
+        function toggleText() {
+            // Přepínání mezi třídami stavů 'state-a' a 'state-b'
+            if (container.classList.contains('state-a')) {
+                container.classList.remove('state-a');
+                container.classList.add('state-b');
+            } else {
+                container.classList.remove('state-b');
+                container.classList.add('state-a');
+            }
+        }
+    </script>
+</body>
+</html>
